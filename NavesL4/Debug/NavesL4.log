@@ -1,0 +1,14 @@
+﻿  Space.cpp
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(41,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(76,31): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(83,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(118,31): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(142,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(200,26): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(207,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(269,26): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(276,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(338,26): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(346,30): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\UO277172\Downloads\Plataformas Solución\NavesL4\Space.cpp(428,26): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+  NavesL4.vcxproj -> C:\Users\UO277172\Downloads\Plataformas Solución\Debug\NavesL4.exe
