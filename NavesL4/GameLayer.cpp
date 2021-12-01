@@ -47,7 +47,6 @@ void GameLayer::init() {
 	backgroundLifes2 = new Actor("res/corazon.png", 65, 80, 44, 36, game);
 	backgroundRecolectables = new Actor("res/icono_recolectable.png", WIDTH - 30, HEIGHT - 30, 40, 40, game);
 
-	enemies.clear(); // Vaciar por si reiniciamos el juego
 	projectiles.clear(); // Vaciar por si reiniciamos el juego
 
 	loadMap("res/" + to_string(game->currentLevel) + ".txt");
@@ -84,21 +83,6 @@ void GameLayer::loadMap(string name) {
 void GameLayer::loadMapObject(char character, float x, float y)
 {
 	switch (character) {
-	case 'C': {
-		cup = new Tile("res/copa.png", x, y, game);
-		// modificación para empezar a contar desde el suelo.
-		cup->y = cup->y - cup->height / 2;
-		space->addDynamicActor(cup); // Realmente no hace falta
-		break;
-	}
-	case 'E': {
-		Enemy* enemy = new Enemy(x, y, game);
-		// modificación para empezar a contar desde el suelo.
-		enemy->y = enemy->y - enemy->height / 2;
-		enemies.push_back(enemy);
-		space->addDynamicActor(enemy);
-		break;
-	}
 	case '1': {
 		player = new Player(x, y, game);
 		// modificación para empezar a contar desde el suelo.
@@ -271,19 +255,6 @@ void GameLayer::update() {
 		return;
 	}
 
-	// Nivel superado
-	if (cup->isOverlap(player) && cup->isOverlap(player2)) {
-		game->currentLevel++;
-		if (game->currentLevel > game->finalLevel) {
-			game->currentLevel = 0;
-		}
-		saved = false;
-		message = new Actor("res/mensaje_ganar.png", WIDTH * 0.5, HEIGHT * 0.5,
-			WIDTH, HEIGHT, game);
-		pause = true;
-		init();
-	}
-
 	if ((flag->isOverlap(player) || flag->isOverlap(player2)) && !saved) {
 		saved = true;
 		savedlifes = player->lifes;
@@ -330,9 +301,6 @@ void GameLayer::update() {
 	background->update();
 	player->update();
 	player2->update();
-	for (auto const& enemy : enemies) {
-		enemy->update();
-	}
 	for (auto const& projectile : projectiles) {
 		projectile->update();
 	}
@@ -357,58 +325,6 @@ void GameLayer::update() {
 		}
 	}
 
-	for (auto const& enemy : enemies) {
-		if (player->isOverlap(enemy) && enemy->state == game->stateMoving) {
-			player->loseLife();
-			textLifes->content = "P1:   " + to_string(player->lifes);
-			if (player->lifes <= 0) {
-				if (saved) {
-					player->x = flag->x;
-					player->y = flag->y;
-					player2->x = flag->x;
-					player2->y = flag->y;
-					player->lifes = savedlifes;
-					player2->lifes = savedlifes2;
-					textLifes->content = "P1:   " + to_string(player->lifes);
-					textLifes2->content = "P2:   " + to_string(player2->lifes);
-				}
-				else {
-					message = new Actor("res/mensaje_perder.png", WIDTH * 0.5, HEIGHT * 0.5,
-						WIDTH, HEIGHT, game);
-					pause = true;
-					init();
-					return;
-				}
-			}
-		}
-	}
-
-	for (auto const& enemy : enemies) {
-		if (player2->isOverlap(enemy) && enemy->state == game->stateMoving) {
-			player2->loseLife();
-			textLifes2->content = "P2:   " + to_string(player2->lifes);
-			if (player2->lifes <= 0) {
-				if (saved) {
-					player->x = flag->x;
-					player->y = flag->y;
-					player2->x = flag->x;
-					player2->y = flag->y;
-					player->lifes = savedlifes;
-					player2->lifes = savedlifes2;
-					textLifes->content = "P1:   " + to_string(player->lifes);
-					textLifes2->content = "P2:   " + to_string(player2->lifes);
-				}
-				else {
-					message = new Actor("res/mensaje_perder.png", WIDTH * 0.5, HEIGHT * 0.5,
-						WIDTH, HEIGHT, game);
-					pause = true;
-					init();
-					return;
-				}
-			}
-		}
-	}
-
 	//Colision recolectable jugador
 	list<Recolectable*> deleteRecol;
 	for (auto const& recolectable : recolectables) {
@@ -426,9 +342,8 @@ void GameLayer::update() {
 	}
 
 
-	// Colisiones , Enemy - Projectile
-
-	list<Enemy*> deleteEnemies;
+	// Colisiones Proyectiles
+	
 	list<Projectile*> deleteProjectiles;
 	for (auto const& projectile : projectiles) {
 		if (projectile->isInRender(scrollX) == false || projectile->vx == 0) {
@@ -442,47 +357,6 @@ void GameLayer::update() {
 			}
 		}
 	}
-
-
-
-	for (auto const& enemy : enemies) {
-		for (auto const& projectile : projectiles) {
-			if (enemy->isOverlap(projectile) && enemy->state == game->stateMoving) {
-				bool pInList = std::find(deleteProjectiles.begin(),
-					deleteProjectiles.end(),
-					projectile) != deleteProjectiles.end();
-
-				if (!pInList) {
-					deleteProjectiles.push_back(projectile);
-				}
-
-
-				enemy->impacted();
-				points++;
-				textPoints->content = to_string(points);
-
-
-			}
-		}
-	}
-
-	for (auto const& enemy : enemies) {
-		if (enemy->state == game->stateDead) {
-			bool eInList = std::find(deleteEnemies.begin(),
-				deleteEnemies.end(),
-				enemy) != deleteEnemies.end();
-
-			if (!eInList) {
-				deleteEnemies.push_back(enemy);
-			}
-		}
-	}
-
-	for (auto const& delEnemy : deleteEnemies) {
-		enemies.remove(delEnemy);
-		space->removeDynamicActor(delEnemy);
-	}
-	deleteEnemies.clear();
 
 	for (auto const& delDestr : deleteDestr) {
 		destructibles.remove(delDestr);
@@ -557,13 +431,9 @@ void GameLayer::draw() {
 	for (auto const& projectile : projectiles) {
 		projectile->draw(scrollX);
 	}
-	cup->draw(scrollX);
 	flag->draw(scrollX);
 	player->draw(scrollX);
 	player2->draw(scrollX);
-	for (auto const& enemy : enemies) {
-		enemy->draw(scrollX);
-	}
 
 	for (auto const& recolectable : recolectables) {
 		recolectable->draw(scrollX);

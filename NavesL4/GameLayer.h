@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "Background.h"
 
-#include "Enemy.h"
 #include "Projectile.h"
 #include "Text.h"
 #include "Tile.h"
@@ -68,7 +67,6 @@ public:
 	Actor* backgroundLifes;
 	Actor* backgroundLifes2;
 	Actor* backgroundRecolectables;
-	list<Enemy*> enemies;
 	list<Projectile*> projectiles;
 
 	bool saved = false;
