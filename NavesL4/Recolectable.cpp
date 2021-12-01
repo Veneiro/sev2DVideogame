@@ -12,6 +12,6 @@ void Recolectable::update() {
 	animation = aNormal;
 }
 
-void Recolectable::draw(float scrollX) {
-	animation->draw(x - scrollX, y);
+void Recolectable::draw() {
+	animation->draw(x, y);
 }

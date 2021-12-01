@@ -172,7 +172,8 @@
     <ClCompile Include="Plataforma.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Player2.cpp" />
-    <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileP1.cpp" />
+    <ClCompile Include="ProjectileP2.cpp" />
     <ClCompile Include="Recolectable.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -191,7 +192,8 @@
     <ClInclude Include="Plataforma.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Player2.h" />
-    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="ProjectileP1.h" />
+    <ClInclude Include="ProjectileP2.h" />
     <ClInclude Include="Recolectable.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Text.h" />

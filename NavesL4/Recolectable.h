@@ -7,7 +7,7 @@ class Recolectable :
 public:
     Recolectable(float x, float y, Game* game);
     void update();
-    void draw(float scrollX);
+    void draw();
     Animation* animation;
     Animation* aNormal;
 };

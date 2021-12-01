@@ -3,29 +3,43 @@
 Player::Player(float x, float y, Game* game)
 	: Actor("res/jugador.png", x, y, 35, 35, game) {
 
-	onAir = false;
 	orientation = game->orientationRight;
 	state = game->stateMoving;
-	audioShoot = new Audio("res/efecto_disparo.wav", false);
-	aShootingRight = new Animation("res/jugador_disparando_derecha.png",
-		width, height, 160, 40, 6, 4, false, game);
-	aShootingLeft = new Animation("res/jugador_disparando_izquierda.png",
-		width, height, 160, 40, 6, 4, false, game);
+	audioShoot = new Audio("res/efecto_disparar.wav", false);
+	aShootingRight = new Animation("res/player1.png", width, height,
+		250, 250, 1, 1, true, game);
+	aShootingLeft = new Animation("res/player1_left.png", width, height,
+		250, 250, 1, 1, true, game);
 
-	aJumpingRight = new Animation("res/jugador_saltando_derecha.png",
-		width, height, 160, 40, 6, 4, true, game);
-	aJumpingLeft = new Animation("res/jugador_saltando_izquierda.png",
-		width, height, 160, 40, 6, 4, true, game);
-	aIdleRight = new Animation("res/jugador_idle_derecha.png", width, height,
-		320, 40, 6, 8, true, game);
-	aIdleLeft = new Animation("res/jugador_idle_izquierda.png", width, height,
-		320, 40, 6, 8, true, game);
-	aRunningRight = new Animation("res/jugador_corriendo_derecha.png", width, height,
-		320, 40, 6, 8, true, game);
-	aRunningLeft = new Animation("res/jugador_corriendo_izquierda.png", width, height,
-		320, 40, 6, 8, true, game);
-	aRunningLeft = new Animation("res/jugador_corriendo_izquierda.png", width, height,
-		320, 40, 6, 8, true, game);
+	aShootingUp = new Animation("res/player1_up.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aShootingDown = new Animation("res/player1_down.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aIdleRight = new Animation("res/player1.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aIdleLeft = new Animation("res/player1_left.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aIdleTop = new Animation("res/player1_up.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aIdleDown = new Animation("res/player1_down.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aRunningRight = new Animation("res/player1.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aRunningLeft = new Animation("res/player1_left.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aRunningDown = new Animation("res/player1_down.png", width, height,
+		250, 250, 1, 1, true, game);
+
+	aRunningUp = new Animation("res/player1_up.png", width, height,
+		250, 250, 1, 1, true, game);
 
 	animation = aIdleRight;
 
@@ -33,14 +47,6 @@ Player::Player(float x, float y, Game* game)
 
 
 void Player::update() {
-	// En el aire y moviéndose, PASA a estar saltando
-	if (onAir && state == game->stateMoving) {
-		state = game->stateJumping;
-	}
-	// No está en el aire y estaba saltando, PASA a moverse
-	if (!onAir && state == game->stateJumping) {
-		state = game->stateMoving;
-	}
 
 
 	if (invulnerableTime > 0) {
@@ -48,13 +54,6 @@ void Player::update() {
 	}
 
 	bool endAnimation = animation->update();
-
-	if (collisionDown == true) {
-		onAir = false;
-	}
-	else {
-		onAir = true;
-	}
 
 
 	// Acabo la animación, no sabemos cual
@@ -67,6 +66,12 @@ void Player::update() {
 
 
 	// Establecer orientación
+	if (vy > 0) {
+		orientation = game->orientationDown;
+	}
+	if (vy < 0) {
+		orientation = game->orientationTop;
+	}
 	if (vx > 0) {
 		orientation = game->orientationRight;
 	}
@@ -74,17 +79,14 @@ void Player::update() {
 		orientation = game->orientationLeft;
 	}
 
-
 	// Selección de animación basada en estados
-	if (state == game->stateJumping) {
-		if (orientation == game->orientationRight) {
-			animation = aJumpingRight;
-		}
-		if (orientation == game->orientationLeft) {
-			animation = aJumpingLeft;
-		}
-	}
 	if (state == game->stateShooting) {
+		if (orientation == game->orientationTop) {
+			animation = aShootingUp;
+		}
+		if (orientation == game->orientationDown) {
+			animation = aShootingDown;
+		}
 		if (orientation == game->orientationRight) {
 			animation = aShootingRight;
 		}
@@ -101,12 +103,28 @@ void Player::update() {
 				animation = aRunningLeft;
 			}
 		}
-		if (vx == 0) {
+
+		if (vy != 0) {
+			if (orientation == game->orientationTop) {
+				animation = aRunningUp;
+			}
+			if (orientation == game->orientationDown) {
+				animation = aRunningDown;
+			}
+		}
+
+		if (vx == 0 && vy == 0) {
 			if (orientation == game->orientationRight) {
 				animation = aIdleRight;
 			}
 			if (orientation == game->orientationLeft) {
 				animation = aIdleLeft;
+			}
+			if (orientation == game->orientationTop) {
+				animation = aIdleTop;
+			}
+			if (orientation == game->orientationDown) {
+				animation = aIdleDown;
 			}
 		}
 	}
@@ -126,17 +144,28 @@ void Player::moveY(float axis) {
 	vy = axis * 3;
 }
 
-Projectile* Player::shoot() {
+ProjectileP1* Player::shoot() {
 
 	if (shootTime == 0) {
 		state = game->stateShooting;
 		audioShoot->play();
 		aShootingLeft->currentFrame = 0; //"Rebobinar" aniamción
 		aShootingRight->currentFrame = 0; //"Rebobinar" aniamción
+		aShootingUp->currentFrame = 0; //"Rebobinar" aniamción
+		aShootingDown->currentFrame = 0; //"Rebobinar" aniamción
 		shootTime = shootCadence;
-		Projectile* projectile = new Projectile(x, y, game);
+		ProjectileP1* projectile = new ProjectileP1(x, y, game);
 		if (orientation == game->orientationLeft) {
-			projectile->vx = projectile->vx * -1; // Invertir
+			projectile->vx = projectile->vx - 12;
+		}
+		if (orientation == game->orientationRight) {
+			projectile->vx = projectile->vx + 12;
+		}
+		if (orientation == game->orientationDown) {
+			projectile->vy = projectile->vy + 12;
+		}
+		if (orientation == game->orientationTop) {
+			projectile->vy = projectile->vy - 12;
 		}
 		return projectile;
 	}
@@ -145,21 +174,14 @@ Projectile* Player::shoot() {
 	}
 }
 
-void Player::draw(float scrollX) {
+void Player::draw() {
 	if (invulnerableTime == 0) {
-		animation->draw(x - scrollX, y);
+		animation->draw(x, y);
 	}
 	else {
 		if (invulnerableTime % 10 >= 0 && invulnerableTime % 10 <= 5) {
-			animation->draw(x - scrollX, y);
+			animation->draw(x, y);
 		}
-	}
-}
-
-void Player::jump() {
-	if (!onAir) {
-		vy = -16;
-		onAir = true;
 	}
 }
 

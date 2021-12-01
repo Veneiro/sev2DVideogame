@@ -4,7 +4,8 @@
 #include "Player.h"
 #include "Background.h"
 
-#include "Projectile.h"
+#include "ProjectileP1.h"
+#include "ProjectileP2.h"
 #include "Text.h"
 #include "Tile.h"
 #include "Pad.h"
@@ -32,20 +33,13 @@ public:
 	void gamePadToControls(SDL_Event event); // USO DE GAMEPAD
 	void loadMap(string name);
 	void loadMapObject(char character, float x, float y);
-	void calculateScroll();
 	Actor* message;
 	bool pause;
 	// Elementos de interfaz
 	SDL_GameController* gamePad;
 	Pad* pad;
-	Actor* buttonJump;
-	Actor* buttonShoot;
 
-	Tile* cup; // Elemento de final de nivel
-	Tile* flag;
 	Space* space;
-	float scrollX;
-	float scrollY;
 	int mapWidth;
 	list<Tile*> tiles;
 	list<Tile*> destructibles;
@@ -53,21 +47,17 @@ public:
 	list<Recolectable*> recolectables;
 
 	Audio* audioBackground;
-	Text* textPoints;
 	Text* textLifes;
 	Text* textLifes2;
-	Text* textRecolectables;
-	int points;
 	int recol;
 	int newEnemyTime = 0;
 	Player* player;
 	Player2* player2;
 	Background* background;
-	Actor* backgroundPoints;
 	Actor* backgroundLifes;
 	Actor* backgroundLifes2;
-	Actor* backgroundRecolectables;
-	list<Projectile*> projectiles;
+	list<ProjectileP1*> projectiles1;
+	list<ProjectileP2*> projectiles2;
 
 	bool saved = false;
 	int savedlifes = 3;

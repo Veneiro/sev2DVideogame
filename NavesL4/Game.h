@@ -50,5 +50,7 @@ public:
 
 	int const orientationRight = 1;
 	int const orientationLeft = 2;
+	int const orientationTop = 3;
+	int const orientationDown = 4;
 
 };
