@@ -19,6 +19,7 @@ public:
 	int invulnerableTime = 0;
 	int orientation;
 	int state;
+	int ammoLeftP1 = 10;
 	Animation* aIdleRight;
 	Animation* aIdleLeft;
 	Animation* aIdleTop;

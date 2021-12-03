@@ -8,6 +8,7 @@ GameLayer::GameLayer(Game* game)
 		WIDTH, HEIGHT, game);
 
 	gamePad = SDL_GameControllerOpen(0);
+
 	init();
 }
 
@@ -21,8 +22,6 @@ void GameLayer::init() {
 	//audioBackground = new Audio("res/musica_ambiente.mp3", true);
 	//audioBackground->play();
 
-	recol = 0;
-
 	textLifes = new Text("lives", 95, 80, game);
 	textLifes->content = "P1:   " + to_string(3);
 	
@@ -34,8 +33,26 @@ void GameLayer::init() {
 	backgroundLifes = new Actor("res/corazon.png", 120, 80, 44, 36, game);
 	backgroundLifes2 = new Actor("res/corazon.png", WIDTH - 100, 80, 44, 36, game);
 
+	backgroundAmmo = new Actor("res/icono_recolectable.png",
+		120, 120, 44, 40, game);
+	backgroundAmmo2 = new Actor("res/icono_recolectable.png",
+		WIDTH - 100, 120, 44, 40, game);
+
+	textAmmo = new Text("ammo", 76, 120, game);
+	textAmmo->content = to_string(10);
+
+	textAmmo2 = new Text("ammo", WIDTH - 146, 120, game);
+	textAmmo2->content = to_string(10);
+
+	P1Rounds = new Text("p1R", (WIDTH * 0.5) - 40, 120, game);
+	P1Rounds->content = "P1: " + to_string(p1Rounds);
+
+	P2Rounds = new Text("p2R", (WIDTH * 0.5) + 40, 120, game);
+	P2Rounds->content = to_string(p2Rounds) + ": P2";
+
 	projectiles1.clear(); // Vaciar por si reiniciamos el juego
 	projectiles2.clear(); // Vaciar por si reiniciamos el juego
+	hearts.clear();
 
 	loadMap("res/" + to_string(game->currentLevel) + ".txt");
 }
@@ -231,7 +248,30 @@ void GameLayer::processControls() {
 
 }
 
-void GameLayer::update() {
+void GameLayer::update() {	
+
+	//Gana uno de los jugadores
+	if (p1Rounds == 3) {
+
+	}
+	else if (p2Rounds == 3) {
+
+	}
+
+	//Gana una ronda
+	if (player->state == game->stateDead) {
+		p1Rounds++;
+		game->currentLevel++;
+		init();
+		return;
+	}
+	else if (player2->state == game->stateDead) {
+		p2Rounds++;
+		game->currentLevel++;
+		init();
+		return;
+	}
+
 	if (pause) {
 		return;
 	}
@@ -240,8 +280,29 @@ void GameLayer::update() {
 	player->update();
 	player2->update();
 
+	//Update Ammo Left for both players
+	textAmmo->content = to_string(player->ammoLeftP1);
+	textAmmo2->content = to_string(player2->ammoLeftP2);
+
+	//Update Ammo Objects
 	for (auto const& recolectable : recolectables) {
 		recolectable->update();
+	}
+
+	//Maps Objects Generation
+	newHeartTime--;
+	newAmmoTime--;
+	if (newHeartTime <= 0) {
+		int rX = (rand() % WIDTH);
+		int rY = (rand() % HEIGHT);
+		hearts.push_back(new Heart(rX, rY, game));
+		newHeartTime = 500;
+	}
+	if (newAmmoTime <= 0) {
+		int rX = (rand() % WIDTH);
+		int rY = (rand() % HEIGHT);
+		recolectables.push_back(new Recolectable(rX, rY, game));
+		newAmmoTime = 300;
 	}
 
 	// Colisiones
@@ -260,17 +321,61 @@ void GameLayer::update() {
 		}
 	}
 
-	//Colision recolectable jugador
+	//Colision Munición jugador
 	list<Recolectable*> deleteRecol;
 	for (auto const& recolectable : recolectables) {
-		if (player->isOverlap(recolectable) || player2->isOverlap(recolectable)) {
-			recol++;
+		if (player->isOverlap(recolectable)) {
+			player->ammoLeftP1++;
+			textAmmo->content = to_string(player->ammoLeftP1);
 			bool pInList = std::find(deleteRecol.begin(),
 				deleteRecol.end(),
 				recolectable) != deleteRecol.end();
 
 			if (!pInList) {
 				deleteRecol.push_back(recolectable);
+			}
+		}
+	}
+
+	for (auto const& recolectable : recolectables) {
+		if (player2->isOverlap(recolectable)) {
+			player2->ammoLeftP2++;
+			textAmmo->content = to_string(player->ammoLeftP1);
+			bool pInList = std::find(deleteRecol.begin(),
+				deleteRecol.end(),
+				recolectable) != deleteRecol.end();
+
+			if (!pInList) {
+				deleteRecol.push_back(recolectable);
+			}
+		}
+	}
+
+	//Colision Jugadores con Corazón
+	list<Heart*> deleteHeart;
+	for (auto const& heart : hearts) {
+		if (player->isOverlap(heart)) {
+			player->lifes++;
+			textLifes->content = "P1:   " + to_string(player->lifes);
+			bool pInList = std::find(deleteHeart.begin(),
+				deleteHeart.end(),
+				heart) != deleteHeart.end();
+
+			if (!pInList) {
+				deleteHeart.push_back(heart);
+			}
+		}
+	}
+	for (auto const& heart : hearts) {
+		if (player2->isOverlap(heart)) {
+			player2->lifes++;
+			textLifes2->content = "P2:   " + to_string(player2->lifes);
+			bool pInList = std::find(deleteHeart.begin(),
+				deleteHeart.end(),
+				heart) != deleteHeart.end();
+
+			if (!pInList) {
+				deleteHeart.push_back(heart);
 			}
 		}
 	}
@@ -291,6 +396,10 @@ void GameLayer::update() {
 
 			if (!pInList) {
 				deleteProjectiles2.push_back(projectile);
+			}
+
+			if (player->lifes <= 0) {
+				player->state = game->stateDead;
 			}
 		}
 
@@ -319,6 +428,10 @@ void GameLayer::update() {
 			if (!pInList) {
 				deleteProjectiles1.push_back(projectile);
 			}
+
+			if (player2->lifes <= 0) {
+				player2->state = game->stateDead;
+			}
 		}
 
 		if (projectile->isInRender() == false || (projectile->vx == 0 && projectile->vy == 0)) {
@@ -332,6 +445,11 @@ void GameLayer::update() {
 			}
 		}
 	}
+
+	for (auto const& delHeart : deleteHeart) {
+		hearts.remove(delHeart);
+	}
+	deleteHeart.clear();
 
 	for (auto const& delDestr : deleteDestr) {
 		destructibles.remove(delDestr);
@@ -387,6 +505,10 @@ void GameLayer::draw() {
 		projectile->draw();
 	}
 
+	for (auto const& heart : hearts) {
+		heart->draw();
+	}
+
 	player->draw();
 	player2->draw();
 
@@ -401,6 +523,11 @@ void GameLayer::draw() {
 	backgroundLifes2->draw();
 	textLifes2->draw();
 
+	backgroundAmmo->draw();
+	textAmmo->draw();
+
+	backgroundAmmo2->draw();
+	textAmmo2->draw();
 
 	// HUD
 	if (game->input == game->inputMouse) {
@@ -409,6 +536,9 @@ void GameLayer::draw() {
 	if (pause) {
 		message->draw();
 	}
+
+	P1Rounds->draw();
+	P2Rounds->draw();
 
 	SDL_RenderPresent(game->renderer); // Renderiza
 }

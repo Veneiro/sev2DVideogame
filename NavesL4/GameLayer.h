@@ -20,6 +20,8 @@
 #include "Recolectable.h"
 #include "Plataforma.h"
 
+#include "Heart.h"
+
 class GameLayer : public Layer
 {
 public:
@@ -45,23 +47,28 @@ public:
 	list<Tile*> destructibles;
 	list<Plataforma*> plataformas;
 	list<Recolectable*> recolectables;
+	list<Heart*> hearts;
 
 	Audio* audioBackground;
 	Text* textLifes;
 	Text* textLifes2;
+	Text* textAmmo;
+	Text* textAmmo2;
+	Text* P1Rounds;
+	int p1Rounds = 0;
+	Text* P2Rounds;
+	int p2Rounds = 0;
 	int recol;
-	int newEnemyTime = 0;
 	Player* player;
 	Player2* player2;
 	Background* background;
+	Actor* backgroundAmmo;
+	Actor* backgroundAmmo2;
 	Actor* backgroundLifes;
 	Actor* backgroundLifes2;
 	list<ProjectileP1*> projectiles1;
 	list<ProjectileP2*> projectiles2;
 
-	bool saved = false;
-	int savedlifes = 3;
-	int savedlifes2 = 3;
 	bool controlContinue = false;
 	bool controlContinue2 = false;
 	bool controlShoot = false;
@@ -71,6 +78,8 @@ public:
 	int controlMoveX = 0;
 	int controlMoveX2 = 0;
 	int timeDestroy = 60;
+	int newHeartTime = 1000;
+	int newAmmoTime = 500;
 
 
 };

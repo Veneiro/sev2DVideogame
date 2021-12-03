@@ -1,7 +1,7 @@
 #include "Pad.h"
 
 Pad::Pad(float x, float y, Game* game)
-	: Actor("res/pad.png", x, y, 120, 120, game) {
+	: Actor("", x, y, 120, 120, game) {
 
 }
 

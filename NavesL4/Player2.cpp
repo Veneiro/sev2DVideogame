@@ -145,8 +145,9 @@ void Player2::moveY(float axis) {
 
 ProjectileP2* Player2::shoot() {
 
-	if (shootTime == 0) {
+	if (shootTime == 0 && ammoLeftP2 > 0) {
 		state = game->stateShooting;
+		ammoLeftP2--;
 		audioShoot->play();
 		aShootingLeft->currentFrame = 0; //"Rebobinar" aniamción
 		aShootingRight->currentFrame = 0; //"Rebobinar" aniamción
