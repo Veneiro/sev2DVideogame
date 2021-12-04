@@ -1,4 +1,5 @@
 #include "GameLayer.h"
+#include <time.h>
 
 GameLayer::GameLayer(Game* game)
 	: Layer(game) {
@@ -55,7 +56,11 @@ void GameLayer::init() {
 	hearts.clear();
 	powerUpAmmo.clear();
 
-	loadMap("res/" + to_string(game->currentLevel) + ".txt");
+	srand(time(NULL));
+	int max = 5;
+	int random = (rand()%max);
+
+	loadMap("res/" + to_string(random) + ".txt");
 }
 
 void GameLayer::loadMap(string name) {
@@ -253,22 +258,32 @@ void GameLayer::update() {
 
 	//Gana uno de los jugadores
 	if (p1Rounds == 3) {
-
+		pause = true;
+		message = new Actor("res/Ganador1.png", WIDTH * 0.5, HEIGHT * 0.5,
+			WIDTH, HEIGHT, game);
 	}
 	else if (p2Rounds == 3) {
-
+		pause = true;
+		message = new Actor("res/Ganador2.png", WIDTH * 0.5, HEIGHT * 0.5,
+			WIDTH, HEIGHT, game);
 	}
 
 	//Gana una ronda
 	if (player->state == game->stateDead) {
-		p1Rounds++;
-		game->currentLevel++;
+		p2Rounds++;
+		srand(time(NULL));
+		int max = 5;
+		int random = (rand() % max);
+		game->currentLevel = random;
 		init();
 		return;
 	}
 	else if (player2->state == game->stateDead) {
-		p2Rounds++;
-		game->currentLevel++;
+		p1Rounds++;
+		srand(time(NULL));
+		int max = 5;
+		int random = (rand() % max);
+		game->currentLevel = random;
 		init();
 		return;
 	}
