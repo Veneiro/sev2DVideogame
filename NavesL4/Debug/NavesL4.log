@@ -1,18 +1,20 @@
-﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(513,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (NavesL4.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: El directorio intermedio (Debug\) contiene archivos compartidos de otro proyecto (NavesL4.vcxproj). Esto puede dar lugar a un comportamiento incorrecto de limpieza y recompilación.
   GameLayer.cpp
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\Audio.h(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(77,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(78,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(298,34): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(298,30): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(304,48): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(304,44): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(592,35): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(592,26): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(595,39): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(601,51): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(601,42): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(602,39): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(617,35): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\mateo\Documentos\GitHub\sev2DVideogame\NavesL4\GameLayer.cpp(617,26): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-  NavesL4.vcxproj -> C:\Users\mateo\Documentos\GitHub\sev2DVideogame\Debug\TanksBlitz.exe
+D:\GitHub\2\sev2DVideogame\NavesL4\Audio.h(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(78,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(79,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(299,34): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(299,30): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(305,48): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(305,44): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(311,41): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(311,37): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(663,35): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(663,26): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(666,39): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(672,51): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(672,42): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(673,39): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(688,35): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+D:\GitHub\2\sev2DVideogame\NavesL4\GameLayer.cpp(688,26): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+  NavesL4.vcxproj -> D:\GitHub\2\sev2DVideogame\Debug\TanksBlitz.exe

@@ -53,6 +53,7 @@ void GameLayer::init() {
 	projectiles1.clear(); // Vaciar por si reiniciamos el juego
 	projectiles2.clear(); // Vaciar por si reiniciamos el juego
 	hearts.clear();
+	powerUpAmmo.clear();
 
 	loadMap("res/" + to_string(game->currentLevel) + ".txt");
 }
@@ -304,6 +305,35 @@ void GameLayer::update() {
 		recolectables.push_back(new Recolectable(rX, rY, game));
 		newAmmoTime = 300;
 	}
+	if (newPuAmmoTime <= 0) {
+		int rX = (rand() % WIDTH);
+		int rY = (rand() % HEIGHT);
+		powerUpAmmo.push_back(new PU_Ammo(rX, rY, game));
+		newPuAmmoTime = 1300;
+	}
+
+	//Power Ups Cooldown
+	if (cooldownAmmo1 <= 0) {
+		powerUpAmmo1 = false;
+		cooldownAmmo1 = 500;
+		player->shootCadence = 60;
+	}
+	if (cooldownAmmo2 <= 0) {
+		powerUpAmmo2 = false;
+		cooldownAmmo2 = 500;
+		player2->shootCadence = 20;
+	}
+
+	if (powerUpAmmo1 == true) {
+		cooldownAmmo1--;
+		player->shootCadence = 20;
+		player->ammoLeftP1 = 10;
+	}
+	if (powerUpAmmo2 == true) {
+		cooldownAmmo2--;
+		player2->shootCadence = 20;
+		player2->ammoLeftP2 = 10;
+	}
 
 	// Colisiones
 	timeDestroy--;
@@ -376,6 +406,37 @@ void GameLayer::update() {
 
 			if (!pInList) {
 				deleteHeart.push_back(heart);
+			}
+		}
+	}
+
+	//Colision Jugador con Cadence Power UP
+	list<PU_Ammo*> deletePuAmmo;
+	for (auto const& ammo : powerUpAmmo) {
+		if (player->isOverlap(ammo)) {
+			
+			powerUpAmmo1 = true;
+
+			bool pInList = std::find(deletePuAmmo.begin(),
+				deletePuAmmo.end(),
+				ammo) != deletePuAmmo.end();
+
+			if (!pInList) {
+				deletePuAmmo.push_back(ammo);
+			}
+		}
+	}
+	for (auto const& ammo : powerUpAmmo) {
+		if (player2->isOverlap(ammo)) {
+
+			powerUpAmmo2 = true;
+
+			bool pInList = std::find(deletePuAmmo.begin(),
+				deletePuAmmo.end(),
+				ammo) != deletePuAmmo.end();
+
+			if (!pInList) {
+				deletePuAmmo.push_back(ammo);
 			}
 		}
 	}
@@ -477,6 +538,12 @@ void GameLayer::update() {
 	}
 	deleteProjectiles2.clear();
 
+	for (auto const& delPuAmmo : deletePuAmmo) {
+		powerUpAmmo.remove(delPuAmmo);
+		delete delPuAmmo;
+	}
+	deletePuAmmo.clear();
+
 
 	cout << "update GameLayer" << endl;
 }
@@ -507,6 +574,10 @@ void GameLayer::draw() {
 
 	for (auto const& heart : hearts) {
 		heart->draw();
+	}
+
+	for (auto const& ammo : powerUpAmmo) {
+		ammo->draw();
 	}
 
 	player->draw();

@@ -21,6 +21,7 @@
 #include "Plataforma.h"
 
 #include "Heart.h"
+#include "PU_Ammo.h"
 
 class GameLayer : public Layer
 {
@@ -68,6 +69,7 @@ public:
 	Actor* backgroundLifes2;
 	list<ProjectileP1*> projectiles1;
 	list<ProjectileP2*> projectiles2;
+	list<PU_Ammo*> powerUpAmmo;
 
 	bool controlContinue = false;
 	bool controlContinue2 = false;
@@ -78,9 +80,15 @@ public:
 	int controlMoveX = 0;
 	int controlMoveX2 = 0;
 	int timeDestroy = 60;
+
 	int newHeartTime = 1000;
 	int newAmmoTime = 500;
+	int newPuAmmoTime = 1300;
 
+	bool powerUpAmmo1 = false;
+	int cooldownAmmo1 = 500;
+	bool powerUpAmmo2 = false;
+	int cooldownAmmo2 = 500;
 
 };
 

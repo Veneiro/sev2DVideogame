@@ -93,6 +93,9 @@
     <ClCompile Include="Space.cpp">
       <Filter>Archivos de origen\Otros</Filter>
     </ClCompile>
+    <ClCompile Include="PU_Ammo.cpp">
+      <Filter>Archivos de origen\actores</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Layer.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Space.h">
       <Filter>Archivos de encabezado\Otros</Filter>
+    </ClInclude>
+    <ClInclude Include="PU_Ammo.h">
+      <Filter>Archivos de encabezado\actores</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
