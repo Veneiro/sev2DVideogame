@@ -13,6 +13,8 @@ public:
 	bool isInRender(float scrollX = 0);
 	bool collisionDown;
 	bool collisionUp;
+	bool collisionRight;
+	bool collisionLeft;
 	bool outRight;
 	bool outLeft;
 

@@ -19,9 +19,19 @@ void GameLayer::init() {
 
 	space = new Space(1);
 	tiles.clear();
+	destructibles.clear();
+	plataformas.clear();
 
-	//audioBackground = new Audio("res/musica_ambiente.mp3", true);
-	//audioBackground->play();
+	srand(time(NULL));
+	int max = 5;
+	int random = (rand() % max);
+	audioBackground = new Audio("res/" + to_string(random) + ".wav", true);
+	audioBackground->play();
+
+	if (p1Rounds == 2 || p2Rounds == 2) {
+		audioBackground = new Audio("res/final.wav", true);
+		audioBackground->play();
+	}
 
 	textLifes = new Text("lives", 95, 80, game);
 	textLifes->content = "P1:   " + to_string(3);
@@ -55,10 +65,11 @@ void GameLayer::init() {
 	projectiles2.clear(); // Vaciar por si reiniciamos el juego
 	hearts.clear();
 	powerUpAmmo.clear();
+	powerUpDamage.clear();
 
 	srand(time(NULL));
-	int max = 5;
-	int random = (rand()%max);
+	max = 5;
+	random = (rand()%max);
 
 	loadMap("res/" + to_string(random) + ".txt");
 }
@@ -102,6 +113,7 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '#': {
+
 		Tile* tile = new Tile("res/bloque_solido.png", x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
@@ -118,7 +130,10 @@ void GameLayer::loadMapObject(char character, float x, float y)
 		break;
 	}
 	case '!': { //DESTRUCTIBLES
-		Tile* tile = new Tile("res/bloque_tierra.png", x, y, game);
+		srand(time(NULL));
+		int max = 2;
+		int random = (rand() % max);
+		Tile* tile = new Tile("res/planeta" + to_string(random) + ".png", x, y, game);
 		// modificación para empezar a contar desde el suelo.
 		tile->y = tile->y - tile->height / 2;
 		destructibles.push_back(tile);
@@ -268,6 +283,14 @@ void GameLayer::update() {
 			WIDTH, HEIGHT, game);
 	}
 
+	if (pause) {
+		return;
+	}
+
+	space->update();
+	player->update();
+	player2->update();
+
 	//Gana una ronda
 	if (player->state == game->stateDead) {
 		p2Rounds++;
@@ -287,14 +310,6 @@ void GameLayer::update() {
 		init();
 		return;
 	}
-
-	if (pause) {
-		return;
-	}
-
-	space->update();
-	player->update();
-	player2->update();
 
 	//Update Ammo Left for both players
 	textAmmo->content = to_string(player->ammoLeftP1);
@@ -326,8 +341,29 @@ void GameLayer::update() {
 		powerUpAmmo.push_back(new PU_Ammo(rX, rY, game));
 		newPuAmmoTime = 1300;
 	}
+	if (newPuDamageTime <= 0) {
+		int rX = (rand() % WIDTH);
+		int rY = (rand() % HEIGHT);
+		powerUpDamage.push_back(new PU_Damage(rX, rY, game));
+		newPuDamageTime = 1500;
+	}
 
 	//Power Ups Cooldown
+	if (powerUpDamage1 == true) {
+		cooldownDamage1--;
+	}
+	if (cooldownDamage1 <= 0) {
+		powerUpDamage1 = false;
+		cooldownDamage1 = 250;
+	}
+	if (powerUpDamage2 == true) {
+		cooldownDamage2--;
+	}
+	if (cooldownDamage2 <= 0) {
+		powerUpDamage2 = false;
+		cooldownDamage2 = 250;
+	}
+
 	if (cooldownAmmo1 <= 0) {
 		powerUpAmmo1 = false;
 		cooldownAmmo1 = 500;
@@ -354,7 +390,7 @@ void GameLayer::update() {
 	timeDestroy--;
 	list <Tile*> deleteDestr;
 	for (auto const& destructible : destructibles) {
-		if (destructible->collisionUp == true && timeDestroy <= 0) {
+		if ((destructible->collisionUp == true || destructible->collisionDown == true || destructible->collisionRight == true || destructible->collisionLeft == true) && timeDestroy <= 0) {
 			bool pInList = std::find(deleteDestr.begin(),
 				deleteDestr.end(),
 				destructible) != deleteDestr.end();
@@ -362,7 +398,7 @@ void GameLayer::update() {
 			if (!pInList) {
 				deleteDestr.push_back(destructible);
 			}
-			timeDestroy = 60;
+			timeDestroy = 20;
 		}
 	}
 
@@ -456,6 +492,37 @@ void GameLayer::update() {
 		}
 	}
 
+	//Colision Player with Damage power Up
+	list<PU_Damage*> deletePuDamage;
+	for (auto const& damage : powerUpDamage) {
+		if (player->isOverlap(damage)) {
+
+			powerUpDamage1 = true;
+
+			bool pInList = std::find(deletePuDamage.begin(),
+				deletePuDamage.end(),
+				damage) != deletePuDamage.end();
+
+			if (!pInList) {
+				deletePuDamage.push_back(damage);
+			}
+		}
+	}
+	for (auto const& damage : powerUpDamage) {
+		if (player2->isOverlap(damage)) {
+
+			powerUpDamage2 = true;
+
+			bool pInList = std::find(deletePuDamage.begin(),
+				deletePuDamage.end(),
+				damage) != deletePuDamage.end();
+
+			if (!pInList) {
+				deletePuDamage.push_back(damage);
+			}
+		}
+	}
+
 
 	// Colisiones Proyectiles
 	
@@ -463,9 +530,15 @@ void GameLayer::update() {
 	list<ProjectileP2*> deleteProjectiles2;
 	for (auto const& projectile : projectiles2) {
 		if (player->isOverlap(projectile)) {
-			player->loseLife();
-			textLifes->content = "P1:   " + to_string(player->lifes);
-
+			if (powerUpDamage2 == true) {
+				player->lifes--;
+				player->loseLife();
+				textLifes->content = "P1:   " + to_string(player->lifes);
+			}
+			else if(powerUpDamage2 == false) {
+				player->loseLife();
+				textLifes->content = "P1:   " + to_string(player->lifes);
+			}
 			bool pInList = std::find(deleteProjectiles2.begin(),
 				deleteProjectiles2.end(),
 				projectile) != deleteProjectiles2.end();
@@ -492,10 +565,16 @@ void GameLayer::update() {
 	}
 
 	for (auto const& projectile : projectiles1) {
-
 		if (player2->isOverlap(projectile)) {
-			player2->loseLife();
-			textLifes2->content = "P2:   " + to_string(player2->lifes);
+			if (powerUpDamage1 == true) {
+				player2->lifes--;
+				player2->loseLife();
+				textLifes2->content = "P2:   " + to_string(player2->lifes);
+			}
+			else if (powerUpDamage1 == false) {
+				player2->loseLife();
+				textLifes2->content = "P2:   " + to_string(player2->lifes);
+			}
 
 			bool pInList = std::find(deleteProjectiles1.begin(),
 				deleteProjectiles1.end(),
@@ -559,6 +638,12 @@ void GameLayer::update() {
 	}
 	deletePuAmmo.clear();
 
+	for (auto const& delPuDamage : deletePuDamage) {
+		powerUpDamage.remove(delPuDamage);
+		delete delPuDamage;
+	}
+	deletePuDamage.clear();
+
 
 	cout << "update GameLayer" << endl;
 }
@@ -593,6 +678,10 @@ void GameLayer::draw() {
 
 	for (auto const& ammo : powerUpAmmo) {
 		ammo->draw();
+	}
+
+	for (auto const& damage : powerUpDamage) {
+		damage->draw();
 	}
 
 	player->draw();

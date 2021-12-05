@@ -177,6 +177,7 @@
     <ClCompile Include="ProjectileP1.cpp" />
     <ClCompile Include="ProjectileP2.cpp" />
     <ClCompile Include="PU_Ammo.cpp" />
+    <ClCompile Include="PU_Damage.cpp" />
     <ClCompile Include="Recolectable.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="ProjectileP1.h" />
     <ClInclude Include="ProjectileP2.h" />
     <ClInclude Include="PU_Ammo.h" />
+    <ClInclude Include="PU_Damage.h" />
     <ClInclude Include="Recolectable.h" />
     <ClInclude Include="Space.h" />
     <ClInclude Include="Text.h" />

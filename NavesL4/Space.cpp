@@ -20,6 +20,8 @@ void Space::update() {
         actor->outLeft = true;
         actor->outRight = true;
         actor->collisionUp = false;
+        actor->collisionRight = false;
+        actor->collisionLeft = false;
 
 		// MoverDerecha / izquierda
 		updateMoveRight(actor);
@@ -163,6 +165,8 @@ void Space::updateMoveRight(Actor* dynamicAct) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
                     possibleMovement = leftStatic - rightDynamic;
+                    dynamicAct->collisionLeft = true;
+                    staticAct->collisionRight = true;
                 }
             }
         }
@@ -228,6 +232,8 @@ void Space::updateMoveLeft(Actor* dynamicAct) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
                     possibleMovement = rightStatic - leftDynamic;
+                    dynamicAct->collisionRight = true;
+                    staticAct->collisionLeft = true;
                 }
 
             }
@@ -299,6 +305,8 @@ void Space::updateMoveTop(Actor* dynamicAct) {
                     // La distancia es MENOR que nuestro movimiento posible
                     // Tenemos que actualizar el movimiento posible a uno menor
                     possibleMovement = downStatic - topDynamic;
+                    dynamicAct->collisionUp = true;
+                    staticAct->collisionDown = true;
                 }
             }
         }
