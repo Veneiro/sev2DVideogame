@@ -2,6 +2,11 @@
 	The tanks Blitz Game is a local multiplayer game where you can challenge your mates 
 	
 	in exciting battles on a random scenario
+## Trailer
+	It is a bit of a random trailer bur there you have it :)
+ 
+**[TANKS BLITZ TRAILER](https://www.youtube.com/watch?v=PVIkWoxzQNk)**
+
 # What do you have
 	You can shoot to your enemy, get ammo and lifes that randomly appears on the 
 	
